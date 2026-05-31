@@ -8,6 +8,7 @@ extern char				*ft_strcpy(char *dst, const char *src);
 extern int				ft_strcmp(const char *s1, const char *s2);
 extern ssize_t          ft_write(int fd, const void *buf, size_t count);
 extern ssize_t          ft_read(int fd, void *buf, size_t count);
+extern char             *ft_strdup(const char *s);
 
 int main(int ac, char **av)
 {
@@ -26,5 +27,6 @@ int main(int ac, char **av)
     if (ft_read(fd, dst, ft_strlen(av[1])) < 0)
         perror("");
     printf("%ld\n", ft_read(0, dst, ft_strlen(dst) + 1));
+    printf("%s\n", ft_strdup("Bonjour tout le monde"));
     return 0;
 }

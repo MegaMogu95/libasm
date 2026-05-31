@@ -17,6 +17,6 @@ ft_write:
 	push	rax
 	call	__errno_location wrt ..plt
 	pop		rcx
-	mov		[rax], rcx
+	mov		dword [rax], ecx
 	mov		rax, -1
 	ret

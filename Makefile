@@ -1,20 +1,23 @@
-NAME    = libasm.a
-SRCS    = srcs/ft_strlen.s srcs/ft_strcpy.s srcs/ft_strcmp.s srcs/ft_write.s srcs/ft_read.s srcs/ft_strdup.s
+NAME    = tester
+LIB		= libasm.a
+SRCS    = lib/ft_strlen.s lib/ft_strcpy.s lib/ft_strcmp.s lib/ft_write.s lib/ft_read.s lib/ft_strdup.s
 OBJS    = $(SRCS:.s=.o)
 
-all: $(NAME)
+all: $(LIB)
+	cc -Wall -Wextra -Werror -o $(NAME) $(LIB) $(OBJS) main.c
 
 %.o: %.s
 	nasm -f elf64 -g $< -o $@
 
-$(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+$(LIB): $(OBJS)
+	ar rcs $(LIB) $(OBJS)
 
 clean:
 	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(LIB)
 
 re: fclean all
 

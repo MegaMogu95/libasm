@@ -10,20 +10,23 @@ ft_atoi_base:
 	call	check_base						;rax is now 0 or 1
 	pull	rsi								;getting back str in rsi
 	cmp		rax, 0
-	je		.error							;jump and return 0 in case of error (0 was returned)
+	je		error							;jump and return 0 in case of error (0 was returned)
+
+safe_atoi_base:
+	
 
 ;check_base -> ft_strlen > 2, no duplicates, no +- or whitespace (isspace)
 ;base in rdi, ret in rax. Doesn't touch rdi (base)
 check_base:
 	call	ft_strlen
 	cmp		rax, 2
-	jl		.error
+	jl		error
 	call	check_duplicates
 	cmp		rax, 1
-	jl		.error
+	jl		error
 	call	check_char
 	cmp		rax, 1
-	jl		.error
+	jl		error
 
 check_duplicates:
 	mov		rcx, 0
@@ -39,6 +42,6 @@ check_duplicates:
 	.done:
 
 
-.error:
+error:
 	xor	rax, rax
 	ret

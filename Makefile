@@ -1,6 +1,6 @@
 NAME    = tester
 LIB		= libasm.a
-SRCS    = lib/ft_strlen.s lib/ft_strcpy.s lib/ft_strcmp.s lib/ft_write.s lib/ft_read.s lib/ft_strdup.s
+SRCS    = lib/ft_strlen.s lib/ft_strcpy.s lib/ft_strcmp.s lib/ft_write.s lib/ft_read.s lib/ft_strdup.s lib/ft_atoi_base.s
 OBJS    = $(SRCS:.s=.o)
 
 all: $(LIB)

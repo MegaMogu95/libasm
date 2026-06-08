@@ -14,13 +14,7 @@ void  ft_list_push_front(t_list **begin_list, void *data);
 int   ft_list_size(t_list *begin_list);
 void  ft_list_sort(t_list **begin_list, int (*cmp)());
 void  ft_list_remove_if(t_list **begin_list, void *data_ref,
-		int (*cmp)(), void (*free_fct)(void *))
-{
-	(void)begin_list;
-	(void)data_ref;
-	(void)cmp;
-	(void)free_fct;
-}
+		int (*cmp)(), void (*free_fct)(void *));
 
 /* ---- tiny test harness --------------------------------------------------- */
 #define GREEN "\033[0;32m"

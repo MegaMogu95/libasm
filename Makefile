@@ -4,7 +4,7 @@ LIB		= libasm.a
 BLIB	= blibasm.a
 SRCS    = lib/ft_strlen.s lib/ft_strcpy.s lib/ft_strcmp.s lib/ft_write.s lib/ft_read.s lib/ft_strdup.s
 OBJS    = $(SRCS:.s=.o)
-BSRCS	= lib/ft_atoi_base.s lib/ft_list_push_front.s lib/ft_list_size.s lib/ft_list_sort.s
+BSRCS	= lib/ft_atoi_base.s lib/ft_list_push_front.s lib/ft_list_size.s lib/ft_list_sort.s	lib/ft_list_remove_if.s
 BOBJS	= $(BSRCS:.s=.o)
 
 all: $(LIB)

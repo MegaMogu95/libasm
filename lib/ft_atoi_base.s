@@ -4,17 +4,17 @@ global ft_atoi_base
 extern ft_strlen
 
 ft_isspace:
-	cmp		byte [rdi + rcx], 9
+	cmp		dil, 9
 	je		.isspace
-	cmp		byte [rdi + rcx], 10
+	cmp		dil, 10
 	je		.isspace
-	cmp		byte [rdi + rcx], 11
+	cmp		dil, 11
 	je		.isspace
-	cmp		byte [rdi + rcx], 12
+	cmp		dil, 12
 	je		.isspace
-	cmp		byte [rdi + rcx], 13
+	cmp		dil, 13
 	je		.isspace
-	cmp		byte [rdi + rcx], 32
+	cmp		dil, 32
 	je		.isspace
 	xor		rax, rax
 	ret
@@ -25,17 +25,27 @@ ft_isspace:
 ft_atoi_base:
 	push	rdi								;keep rdi (str) before calling check_base
 	mov		rdi, rsi
-	call	check_base						;rax is now 0 or 1
-	pop		rsi								;getting back str in rsi
+	call	check_base						;rax is now 0 or 1.
+	pop		rsi								;str in rsi
 	cmp		rax, 0
 	je		error
+
+;need	: strlen + str + base + sign + str iterator + base iterator + rax + 
+;base	: rdi
+;str	: rsi
+;it1	: rcx
+;it2	: rdx
+;sign	: r8
+;strlen	: r9
 ft_convert:
-	call	ft_strlen
-	mov		r9, rax							;r9 contains strlen(base)
 	xor		rcx, rcx						;for rsi (str)
+	push	rdi								;keep base
+	call	ft_strlen
+	mov		r9, rax
 	.skip_ws:
 		cmp		byte [rsi + rcx], 0
 		je		.done_skipping
+		mov		dil, [rsi + rcx]
 		call	ft_isspace
 		cmp		rax, 0
 		je		.done_skipping
@@ -52,9 +62,8 @@ ft_convert:
 		cmp		byte [rsi + rcx], 43
 		jne		.next
 		inc		rcx
-	.next
-	push	r8								;to keep sign
-	push	r9								;to keep strlen
+	.next:
+	pop		rdi								;base
 	xor		rax, rax
 	.loop:
 		cmp		byte [rsi + rcx], 0
@@ -63,16 +72,14 @@ ft_convert:
 		.find_char:
 			cmp		byte [rdi + rdx], 0
 			je		.done
-			mov		r8b, [rsi + rcx]
-			mov		r9b, [rdi + rdx]
-			cmp		r8b, r9b
+			mov		r10b, [rsi + rcx]
+			mov		r11b, [rdi + rdx]
+			cmp		r10b, r11b
 			je		.found
 			inc		rdx
 			jmp		.find_char
 	.found:
-		pop		r9							;strlen(base)
 		imul	rax, r9
-		pop		r8							;sign
 		imul	rdx, r8
 		add		rax, rdx
 		inc		rcx
@@ -80,8 +87,7 @@ ft_convert:
 	.done:
 		ret
 
-;check_base -> ft_strlen > 2, no duplicates, no +- or whitespace (isspace)
-;base in rdi, ret in rax. Doesn't touch rdi (base)
+;rdi : base (unchanged)
 check_base:
 	call	ft_strlen
 	cmp		rax, 2
@@ -95,42 +101,52 @@ check_base:
 	mov		rax, 1
 	ret
 
+;rsi : main loop iterator
+;rdx : second loop iterator
+;rdi : base (uncahnged)
 check_duplicates:
-	mov		rcx, 0
+	xor		rsi, rsi
 	.loop:
-		cmp		byte [rdi + rcx], 0
+		cmp		byte [rdi + rsi], 0
 		je		.done
-		mov		rdx, rcx
+		mov		rdx, rsi
 		inc		rdx
 		.loop1:
 			cmp		byte [rdi + rdx], 0
 			je		.done1
 			mov		r8b, [rdi + rdx]
-			mov		r9b, [rdi + rcx]
+			mov		r9b, [rdi + rsi]
 			cmp		r9b, r8b
 			je		error
 			inc		rdx
 			jmp		.loop1
 		.done1:
-			inc		rcx
+			inc		rsi
 			jmp		.loop
 	.done:
 		mov		rax, 1
 		ret
 
+
+;rdi : base (unchanged)
+;rsi : iterator
 check_char:
-	xor		rcx, rcx
+	xor		rsi, rsi
 	.loop:
-		cmp		byte [rdi + rcx], 0
+		cmp		byte [rdi + rsi], 0
 		je		.done
+		push	rdi						;keep rdi (base) before calling isspace on dil
+		mov		byte dl, [rdi + rsi]
+		mov		dil, dl
 		call	ft_isspace
+		pop		rdi
 		cmp		rax, 1
 		je		error
-		cmp		byte [rdi + rcx], 43
+		cmp		byte [rdi + rsi], 43
 		je		error
-		cmp		byte [rdi + rcx], 45
+		cmp		byte [rdi + rsi], 45
 		je		error
-		inc		rcx
+		inc		rsi
 		jmp		.loop
 	.done:
 		mov		rax, 1

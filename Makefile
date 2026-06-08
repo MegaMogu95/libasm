@@ -4,14 +4,14 @@ LIB		= libasm.a
 BLIB	= blibasm.a
 SRCS    = lib/ft_strlen.s lib/ft_strcpy.s lib/ft_strcmp.s lib/ft_write.s lib/ft_read.s lib/ft_strdup.s
 OBJS    = $(SRCS:.s=.o)
-BSRCS	= lib/ft_atoi_base.s
+BSRCS	= lib/ft_atoi_base.s lib/ft_list_push_front.s
 BOBJS	= $(BSRCS:.s=.o)
 
 all: $(LIB)
 	cc -Wall -Wextra -Werror -o $(NAME) $(LIB) $(OBJS) main.c
 
 bonus: $(BLIB)
-	cc -Wall -Wextra -Werror -o $(BNAME) $(BLIB) $(OBJS) $(BOBJS) main_bonus.c
+	cc -Wall -Wextra -Werror -std=gnu11 -g -o $(BNAME) $(BLIB) $(OBJS) $(BOBJS) main_bonus.c
 
 %.o: %.s
 	nasm -f elf64 -g $< -o $@

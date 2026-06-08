@@ -11,11 +11,7 @@ typedef struct s_list
 /* ---- prototypes of the assembly bonus functions ------------------------- */
 int   ft_atoi_base(char *str, char *base);
 void  ft_list_push_front(t_list **begin_list, void *data);
-int   ft_list_size(t_list *begin_list)
-{
-	(void)begin_list;
-	return (0);
-}
+int   ft_list_size(t_list *begin_list);
 void  ft_list_sort(t_list **begin_list, int (*cmp)())
 {
 	(void)begin_list;

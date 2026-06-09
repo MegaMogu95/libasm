@@ -17,8 +17,11 @@ ft_list_push_front:
     add     rsp, 8
     pop     rsi
     pop     rdi
+    cmp     rax, 0
+    je      .error
     mov     [rax], rsi
     mov     rdx, [rdi]
     mov     [rax + 8], rdx
     mov     [rdi], rax
+    .error:
     ret

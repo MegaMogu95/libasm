@@ -8,7 +8,6 @@ typedef struct s_list
 	struct s_list *next;
 }	t_list;
 
-/* ---- prototypes of the assembly bonus functions ------------------------- */
 int   ft_atoi_base(char *str, char *base);
 void  ft_list_push_front(t_list **begin_list, void *data);
 int   ft_list_size(t_list *begin_list);
@@ -16,7 +15,6 @@ void  ft_list_sort(t_list **begin_list, int (*cmp)());
 void  ft_list_remove_if(t_list **begin_list, void *data_ref,
 		int (*cmp)(), void (*free_fct)(void *));
 
-/* ---- tiny test harness --------------------------------------------------- */
 #define GREEN "\033[0;32m"
 #define RED   "\033[0;31m"
 #define CYAN  "\033[0;36m"
@@ -44,14 +42,11 @@ static void check(int ok, const char *desc)
 		printf("  " RED "✗  %s" RESET "\n", desc);
 }
 
-/* ---- helpers ------------------------------------------------------------- */
-/* comparison used for sort (ascending) and remove_if (0 == match) */
 static int cmp_str(void *a, void *b)
 {
 	return (strcmp((char *)a, (char *)b));
 }
 
-/* free node structs only — use when the data is NOT owned (string literals) */
 static void free_nodes(t_list *l)
 {
 	t_list *next;
@@ -64,7 +59,6 @@ static void free_nodes(t_list *l)
 	}
 }
 
-/* free node structs AND their data — use when data was strdup'd */
 static void free_all(t_list *l)
 {
 	t_list *next;
@@ -78,7 +72,6 @@ static void free_all(t_list *l)
 	}
 }
 
-/* true if the list's data matches expected[] in order, and length matches */
 static int list_matches(t_list *l, char **expected, int n)
 {
 	int i = 0;
@@ -93,11 +86,8 @@ static int list_matches(t_list *l, char **expected, int n)
 	return (l == NULL && i == n);
 }
 
-/* ---- ft_atoi_base -------------------------------------------------------- */
 static void test_atoi_base(void)
 {
-	/* NOTE: only single / no signs are tested — multiple-sign behaviour      */
-	/* ("--42") differs between implementations, so match it to your ft_atoi. */
 	struct { char *str; char *base; int expected; const char *desc; } c[] = {
 		{ "42",   "0123456789",       42,  "decimal 42" },
 		{ "-42",  "0123456789",      -42,  "negative" },
@@ -120,7 +110,6 @@ static void test_atoi_base(void)
 		check(ft_atoi_base(c[i].str, c[i].base) == c[i].expected, c[i].desc);
 }
 
-/* ---- ft_list_push_front -------------------------------------------------- */
 static void test_push_front(void)
 {
 	t_list *list = NULL;
@@ -149,7 +138,6 @@ static void test_push_front(void)
 	free_nodes(list);
 }
 
-/* ---- ft_list_size -------------------------------------------------------- */
 static void test_size(void)
 {
 	t_list *list = NULL;
@@ -168,14 +156,12 @@ static void test_size(void)
 	free_nodes(list);
 }
 
-/* ---- ft_list_sort -------------------------------------------------------- */
 static void test_sort(void)
 {
 	t_list *list = NULL;
 
 	section("ft_list_sort");
 
-	/* sort should not crash on empty or single-element lists */
 	ft_list_sort(&list, cmp_str);
 	check(list == NULL, "sorting an empty list leaves it empty");
 
@@ -185,7 +171,6 @@ static void test_sort(void)
 		"sorting a single element is a no-op");
 	free_nodes(list);
 
-	/* push banana, cherry, apple  ->  list is apple -> cherry -> banana */
 	list = NULL;
 	ft_list_push_front(&list, "banana");
 	ft_list_push_front(&list, "cherry");
@@ -198,11 +183,10 @@ static void test_sort(void)
 	}
 	free_nodes(list);
 
-	/* already sorted should stay sorted */
 	list = NULL;
 	ft_list_push_front(&list, "3");
 	ft_list_push_front(&list, "2");
-	ft_list_push_front(&list, "1");   /* list: 1 -> 2 -> 3 */
+	ft_list_push_front(&list, "1");
 	ft_list_sort(&list, cmp_str);
 	{
 		char *expected[] = { "1", "2", "3" };
@@ -212,7 +196,6 @@ static void test_sort(void)
 	free_nodes(list);
 }
 
-/* ---- ft_list_remove_if --------------------------------------------------- */
 static void test_remove_if(void)
 {
 	t_list *list = NULL;
@@ -220,12 +203,9 @@ static void test_remove_if(void)
 
 	section("ft_list_remove_if");
 
-	/* removing from an empty list must not crash */
 	ft_list_remove_if(&list, ref, cmp_str, free);
 	check(list == NULL, "remove_if on empty list stays empty");
 
-	/* data is strdup'd so free() is a legitimate free_fct.                   */
-	/* list ends up: remove -> keep -> remove -> keep (matches at head too)   */
 	ft_list_push_front(&list, strdup("keep"));
 	ft_list_push_front(&list, strdup("remove"));
 	ft_list_push_front(&list, strdup("keep"));
@@ -241,7 +221,6 @@ static void test_remove_if(void)
 	}
 	free_all(list);
 
-	/* removing everything should leave the list NULL */
 	list = NULL;
 	ft_list_push_front(&list, strdup("gone"));
 	ft_list_push_front(&list, strdup("gone"));
@@ -251,7 +230,6 @@ static void test_remove_if(void)
 		check(list == NULL, "removing all elements yields an empty list");
 	}
 
-	/* removing nothing should leave the list intact */
 	list = NULL;
 	ft_list_push_front(&list, strdup("b"));
 	ft_list_push_front(&list, strdup("a"));

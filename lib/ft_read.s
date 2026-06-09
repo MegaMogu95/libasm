@@ -15,6 +15,6 @@ ft_read:
 	push	rax
 	call    __errno_location wrt ..plt
 	pop		rcx
-	mov		dword [rax], ecx
+	mov		[rax], ecx
 	mov		rax, -1
 	ret

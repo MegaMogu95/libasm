@@ -136,7 +136,7 @@ check_char:
 		cmp		byte [rdi + rsi], 0
 		je		.done
 		push	rdi						;keep rdi (base) before calling isspace on dil
-		mov		byte dl, [rdi + rsi]
+		mov		dl, [rdi + rsi]
 		mov		dil, dl
 		call	ft_isspace
 		pop		rdi

@@ -1,12 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*   main.c — test driver for libasm                                          */
-/*                                                                            */
-/*   Each ft_ function is run beside its libc twin and the results compared.  */
-/*   Build:  cc main.c -L. -lasm -o test  &&  ./test                          */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>

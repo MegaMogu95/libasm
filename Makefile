@@ -11,7 +11,7 @@ all: $(LIB)
 	cc -Wall -Wextra -Werror -o $(NAME) $(LIB) $(OBJS) main.c
 
 bonus: $(BLIB)
-	cc -Wall -Wextra -Werror -std=gnu11 -g -o $(BNAME) $(BLIB) $(OBJS) $(BOBJS) main_bonus.c
+	cc -Wall -Wextra -Werror -std=gnu11 -o $(BNAME) $(BLIB) $(OBJS) $(BOBJS) main_bonus.c
 
 %.o: %.s
 	nasm -f elf64 -g $< -o $@

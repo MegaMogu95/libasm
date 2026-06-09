@@ -1,34 +1,56 @@
-NAME    = tester
-BNAME	= tester_bonus
-LIB		= libasm.a
-BLIB	= blibasm.a
-SRCS    = lib/ft_strlen.s lib/ft_strcpy.s lib/ft_strcmp.s lib/ft_write.s lib/ft_read.s lib/ft_strdup.s
-OBJS    = $(SRCS:.s=.o)
-BSRCS	= lib/ft_atoi_base.s lib/ft_list_push_front.s lib/ft_list_size.s lib/ft_list_sort.s	lib/ft_list_remove_if.s
-BOBJS	= $(BSRCS:.s=.o)
+NAME		= libasm.a
+BNAME		= blibasm.a
 
-all: $(LIB)
-	cc -Wall -Wextra -Werror -o $(NAME) $(LIB) $(OBJS) main.c
+ASM			= nasm
+ASMFLAGS	= -f elf64
+AR			= ar rcs
 
-bonus: $(BLIB)
-	cc -Wall -Wextra -Werror -std=gnu11 -o $(BNAME) $(BLIB) $(OBJS) $(BOBJS) main_bonus.c
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror -std=gnu11
+
+SRC_DIR		= lib
+
+SRCS		= $(SRC_DIR)/ft_strlen.s \
+              $(SRC_DIR)/ft_strcpy.s \
+              $(SRC_DIR)/ft_strcmp.s \
+              $(SRC_DIR)/ft_write.s \
+              $(SRC_DIR)/ft_read.s \
+              $(SRC_DIR)/ft_strdup.s
+
+BSRCS		= $(SRC_DIR)/ft_atoi_base.s \
+              $(SRC_DIR)/ft_list_push_front.s \
+              $(SRC_DIR)/ft_list_size.s \
+              $(SRC_DIR)/ft_list_sort.s \
+              $(SRC_DIR)/ft_list_remove_if.s
+
+OBJS       = $(SRCS:.s=.o)
+BOBJS = $(BSRCS:.s=.o)
+
+all: $(NAME)
+
+bonus: $(BNAME)
+
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
+
+$(BNAME): $(OBJS) $(BOBJS)
+	$(AR) $(BNAME) $(OBJS) $(BOBJS)
 
 %.o: %.s
-	nasm -f elf64 -g $< -o $@
+	$(ASM) $(ASMFLAGS) $< -o $@
 
-$(LIB): $(OBJS)
-	ar rcs $(LIB) $(OBJS)
+test: $(NAME) main.c
+	$(CC) $(CFLAGS) main.c $(NAME) -o test
 
-$(BLIB): $(OBJS) $(BOBJS)
-	ar rcs $(BLIB) $(OBJS) $(BOBJS)
+test_bonus: $(BNAME) main_bonus.c
+	$(CC) $(CFLAGS) main_bonus.c $(BNAME) -o test_bonus
 
 clean:
 	rm -f $(OBJS) $(BOBJS)
 
 fclean: clean
-	rm -f $(NAME) $(BNAME)
-	rm -f $(LIB) $(BLIB)
+	rm -f $(NAME) $(BNAME) test test_bonus
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all bonus clean fclean re
